@@ -25,24 +25,21 @@ function extractComments (paths, files) {
         files[i] = files[i].match(regex);
         if (!files[i]) continue;
         for (let j = 0; j < files[i].length; j++) {
-            comments.push({
-                text: files[i][j], 
-                path: path.basename(paths[i])
-            });
+            let components = files[i][j].split(';');
+            let params = [];
+            if (components.length == 1) {
+                params['text'] = components[0].trim();
+            } else {
+                for (let j = 0; j < components.length; j++) {
+                    components[j] = components[j].trim();
+                    if (components[j].length == 0) continue;
+                    params[fields[j]] = components[j];
+                }
+            }
+            params['path'] = path.basename(paths[i]);
+            comments.push(params);
         }
     }
-    
-    for (let i = 0; i < comments.length; i++) {
-        let components = comments[i].text.split(';');
-        if (components.length == 1) continue;
-        for (let j = 0; j < components.length; j++) {
-            components[j] = components[j].trim();
-            if (components[j].length == 0) continue;
-            comments[i][fields[j]] = components[j];
-        }
-
-    }
-    console.log(comments);
     return comments;
 }
 function processCommand (command) {
