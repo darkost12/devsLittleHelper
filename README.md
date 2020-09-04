@@ -1,6 +1,5 @@
 **Installation process**
 ```bash
-$ npm install
 $ cd tests
 $ npm install
 ```
