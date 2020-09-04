@@ -6,8 +6,7 @@
   "directories": {
     "test": "tests"
   },
-  "dependencies": {
-    "array-sort": "^1.0.0",
+  "dependencies": { 
     "path": "^0.12.7"
   },
   "devDependencies": {},

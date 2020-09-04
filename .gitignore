@@ -1,4 +1,4 @@
 node_modules/
-tests/
+tests/node_modules/
 package-lock.json
 readme.*
