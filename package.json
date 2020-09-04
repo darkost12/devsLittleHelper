@@ -1,0 +1,27 @@
+{
+  "name": "devslittlehelper",
+  "version": "1.0.0",
+  "description": "%PDF-1.5 %���� 8 0 obj << /Linearized 1 /L 84710 /H [ 794 169 ] /O 12 /E 74138 /N 4 /T 84396 >> endobj",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "array-sort": "^1.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkost12/devsLittleHelper.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/darkost12/devsLittleHelper/issues"
+  },
+  "homepage": "https://github.com/darkost12/devsLittleHelper#readme"
+}
