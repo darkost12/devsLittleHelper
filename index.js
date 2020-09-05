@@ -27,7 +27,7 @@ class App  {
             let matches = file.match(regex);
             if (!matches) continue;
             for (let match of matches) {
-                comments.push(this.parseCommentItemsIntoFiels(
+                comments.push(this.parseCommentItemsIntoFields(
                     match, path 
                 ));
             }
