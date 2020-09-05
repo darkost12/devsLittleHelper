@@ -7,7 +7,7 @@ const path = require('path');
 class App  {
     constructor () {
         let [paths, files] = this.getFiles();
-        this.COMMENTLIST = this.extractComments(paths, files);
+        this.COMMENTLIST = this.extractComments(files, paths);
         this.BUFFER = '';
         console.log('Please, write your command!');
         readLine(x => this.processCommand(x));
@@ -18,22 +18,24 @@ class App  {
         return [filePaths, filePaths.map(path => readFile(path))];
     }
 
-    extractComments (paths, files) {
+    extractComments (files, paths) {
         const regex = /(?<=\/\/ TODO\s)(.*)/gi;
         let comments = [];
-        for (let i in files) {
-            files[i] = files[i].match(regex);
-            if (!files[i]) continue;
-            for (let j in files[i]) {
-                let components = files[i][j].split(';');
-                comments.push(this.parseComponents(
-                    paths[i], components
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            let path = paths[i];
+            let matches = file.match(regex);
+            if (!matches) continue;
+            for (let match of matches) {
+                comments.push(this.parseCommentItemsIntoFiels(
+                    match, path 
                 ));
             }
         }
         return comments;
     }
-    parseComponents (filePath, components) {
+    parseCommentItemsIntoFields (text, filePath) {
+        let components = text.split(';')
         const fields = ['user', 'date', 'comment'];
         const capacities = [10, 10, 50, 15];
         let items = {};
@@ -42,12 +44,13 @@ class App  {
             items['user'] = '';
             items['date'] = '';
         } else {
-            for (let j in components) {
-                components[j] = components[j].trim();
-                if (components[j].length == 0) 
-                    items[fields[j]] = '';
+            for (let [index, component] of components.entries()) {
+                component = component.trim();
+                if (component.length == 0) 
+                    items[fields[index]] = '';
                 else 
-                    items[fields[j]] = shorten(components[j], capacities[j]);
+                    items[fields[index]] = 
+                    shorten(component, capacities[index]);
             }
         }
         items['fileName'] = shorten(path.basename(filePath), capacities[3]);
@@ -108,16 +111,16 @@ class App  {
         this.printHeader(padding, fields, maximums);
         this.printSeparator(padding, maximums);
         fields[0] = 'importance';
-        for (let i in comments) {
-            for (let j in fields){
+        for (let comment of comments) {
+            for (let [index, field] of fields.entries()){
                 this.BUFFER += padding;
-                if (fields[j] == 'importance') 
-                    this.BUFFER += comments[i][fields[j]] > 0 ? '!' : ' ';
+                if (field == 'importance') 
+                    this.BUFFER += comment[field] > 0 ? '!' : ' ';
                 else
-                    this.BUFFER += comments[i][fields[j]].toString()
-                        .padEnd(maximums[j],' ');
+                    this.BUFFER += comment[field].toString()
+                        .padEnd(maximums[index],' ');
                 this.BUFFER += padding;
-                if (j != fields.length - 1)
+                if (index != fields.length - 1)
                     this.BUFFER += '|';
                 else 
                     this.BUFFER += '\n';
@@ -133,11 +136,11 @@ class App  {
     }
 
     printHeader(padding, fields, maximums) {
-        for (let i in fields) {
+        for (let [index, field] of fields.entries()) {
             this.BUFFER += padding;
-            this.BUFFER += fields[i].padEnd(maximums[i],' ');
+            this.BUFFER += field.padEnd(maximums[index],' ');
             this.BUFFER += padding;
-            if (i != fields.length - 1)
+            if (index != fields.length - 1)
                 this.BUFFER += '|';
             else 
                 this.BUFFER += '\n';
