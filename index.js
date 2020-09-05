@@ -63,17 +63,20 @@ class App  {
 
     filterUser(comments, name) {
         return comments.filter(comment => 
-            comment['user'].toLowerCase().startsWith(name.toLowerCase()));
+            comment['user'].toLowerCase().startsWith(name.toLowerCase())
+        );
 	}
 
     filterDate (comments, date) {
         return comments.filter(comment => 
-            comment['date'] > date);
+            comment['date'] > date
+        );
     }
 
     filterImportance (comments) {
         return comments.filter(comment =>
-            comment['importance'] > 0);
+            comment['importance'] > 0
+        );
     }
 
     sortByField(comments, field) {
@@ -193,7 +196,9 @@ class App  {
                     modifier === undefined || 
                     !['importance', 'date', 'user'].includes(modifier)
                 ) {
-                    console.log('Please provide correct key');
+                    console.log(
+                        'Please provide correct key {importance|date|user}'
+                    );
                     break;
                 }
                 let copy = Object.assign([], this.COMMENTLIST);
