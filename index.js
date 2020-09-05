@@ -9,6 +9,7 @@ class App  {
         let [paths, files] = this.getFiles();
         this.COMMENTLIST = this.extractComments(files, paths);
         this.BUFFER = '';
+
         console.log('Please, write your command!');
         readLine(x => this.processCommand(x));
     }
@@ -21,24 +22,26 @@ class App  {
     extractComments (files, paths) {
         const regex = /(?<=\/\/ TODO\s)(.*)/gi;
         let comments = [];
+
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
             let path = paths[i];
             let matches = file.match(regex);
             if (!matches) continue;
             for (let match of matches) {
-                comments.push(this.parseCommentItemsIntoFields(
+                comments.push(this.parseStringIntoComment(
                     match, path 
                 ));
             }
         }
         return comments;
     }
-    parseCommentItemsIntoFields (text, filePath) {
+    parseStringIntoComment (text, filePath) {
         let components = text.split(';')
         const fields = ['user', 'date', 'comment'];
         const capacities = [10, 10, 50, 15];
         let items = {};
+
         if (components.length == 1) {
             items['comment'] = shorten(components[0].trim(), capacities[2]);
             items['user'] = '';
@@ -60,21 +63,17 @@ class App  {
 
     filterUser(comments, name) {
         return comments.filter(comment => 
-            comment['user'].toLowerCase().startsWith(name.toLowerCase())
-		);
+            comment['user'].toLowerCase().startsWith(name.toLowerCase()));
 	}
 
     filterDate (comments, date) {
         return comments.filter(comment => 
-            comment['date'] > date
-            );
-        
+            comment['date'] > date);
     }
 
     filterImportance (comments) {
         return comments.filter(comment =>
-            comment['importance'] > 0)
-       
+            comment['importance'] > 0);
     }
 
     sortByField(comments, field) {
@@ -96,6 +95,7 @@ class App  {
         const fields = ['!', 'user', 'date', 'comment', 'fileName'];
         let maximums = ['!'.length, 'user'.length, 'date'.length, 
             'comment'.length, 'fileName'.length];
+
         if (comments.length == 0) {
             this.printHeader(padding, fields, maximums);
             this.printSeparator(padding, maximums);
@@ -110,6 +110,7 @@ class App  {
         }
         this.printHeader(padding, fields, maximums);
         this.printSeparator(padding, maximums);
+
         fields[0] = 'importance';
         for (let comment of comments) {
             for (let [index, field] of fields.entries()){
@@ -127,6 +128,7 @@ class App  {
             }
         }
         this.printSeparator (padding, maximums);
+        
         process.stdout.write(this.BUFFER);
         this.BUFFER = '';
     }
